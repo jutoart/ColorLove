@@ -17,6 +17,8 @@ struct ColorFeature {
 
   enum Action {
     case colorTapped
+    case generateButtonTapped
+    case newColorGenerated(hexString: String)
   }
 
   var body: some ReducerOf<Self> {
@@ -24,6 +26,23 @@ struct ColorFeature {
       switch action {
       case .colorTapped:
         state.loveCount += 1
+        return .none
+
+      case .generateButtonTapped:
+        return .run { send in
+          @Dependency(\.withRandomNumberGenerator) var withRandomNumberGenerator
+
+          let hexNumber = withRandomNumberGenerator { generator in
+            UInt64.random(in: 0...0xFFFFFF, using: &generator)
+          }
+
+          let hexString = String(hexNumber, radix: 16, uppercase: true)
+          await send(.newColorGenerated(hexString: hexString))
+        }
+
+      case let .newColorGenerated(hexString):
+        state.colorHexString = hexString
+        state.loveCount = 0
         return .none
       }
     }

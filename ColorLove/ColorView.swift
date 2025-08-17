@@ -31,6 +31,15 @@ struct ColorView: View {
         Text("#\(store.colorHexString)")
           .offset(x: .zero, y: -32)
       }
+      .overlay(alignment: .bottom) {
+        Button {
+          store.send(.generateButtonTapped)
+        } label: {
+          Label("Generate", systemImage: "sparkles")
+        }
+        .buttonStyle(BorderedButtonStyle())
+        .offset(x: .zero, y: 56)
+      }
       .padding(80)
   }
 }

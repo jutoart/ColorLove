@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import Foundation
 
 @Reducer
 struct ColorListFeature {
@@ -33,7 +34,7 @@ struct ColorListFeature {
             UInt64.random(in: 0...0xFFFFFF, using: &generator)
           }
 
-          let hexString = String(hexNumber, radix: 16, uppercase: true)
+          let hexString = String(format: "%06X", hexNumber)
           await send(.newColorGenerated(hexString: hexString))
         }
 

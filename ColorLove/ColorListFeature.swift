@@ -11,7 +11,7 @@ import ComposableArchitecture
 struct ColorListFeature {
   @ObservableState
   struct State: Equatable {
-    var colors: IdentifiedArrayOf<ColorModel> = []
+    @Shared(.colors) var colors
 
     var path = StackState<Path.State>()
   }
@@ -41,8 +41,12 @@ struct ColorListFeature {
         return .none
 
       case let .newColorGenerated(hexString):
-        state.path.append(.color(.init(colorHexString: hexString)))
-        state.colors.insert(.init(hexString: hexString), at: .zero)
+        state.path.append(.color(.init(color: .init(hexString: hexString))))
+
+        state.$colors.withLock {
+          _ = $0.insert(.init(hexString: hexString), at: .zero)
+        }
+
         return .none
       }
     }

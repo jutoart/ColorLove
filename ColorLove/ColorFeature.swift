@@ -11,9 +11,15 @@ import ComposableArchitecture
 struct ColorFeature {
   @ObservableState
   struct State: Equatable {
-    var colorHexString: String
-    var colorName = ""
-    var loveCount = 0
+    var color: ColorModel {
+      didSet {
+        $colors.withLock {
+          $0[id: color.id] = color
+        }
+      }
+    }
+
+    @Shared(.colors) var colors
 
     @Presents var edit: ColorEditFeature.State?
   }
@@ -28,13 +34,13 @@ struct ColorFeature {
     Reduce { state, action in
       switch action {
       case .colorTapped:
-        state.loveCount += 1
+        state.color.loveCount += 1
         return .none
 
       case let .edit(.presented(.delegate(delegateAction))):
         switch delegateAction {
         case let .updateColor(name):
-          state.colorName = name
+          state.color.name = name
           state.edit = nil
           return .none
         }
@@ -43,7 +49,7 @@ struct ColorFeature {
         return .none
 
       case .editButtonTapped:
-        state.edit = .init(colorHexString: state.colorHexString, colorName: state.colorName)
+        state.edit = .init(colorHexString: state.color.hexString, colorName: state.color.name)
         return .none
       }
     }

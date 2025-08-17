@@ -13,9 +13,9 @@ struct ColorListView: View {
 
   var body: some View {
     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-      List(store.colors) { color in
+      List(store.colors.sorted()) { color in
         NavigationLink(
-          state: ColorListFeature.Path.State.color(.init(colorHexString: color.hexString))
+          state: ColorListFeature.Path.State.color(.init(color: color))
         ) {
           HStack {
             Text(color.name.isEmpty ? "#\(color.hexString)" : color.name)
@@ -69,13 +69,17 @@ struct ColorListView: View {
 }
 
 #Preview {
-  ColorListView(
-    store: .init(
-      initialState: ColorListFeature.State(colors: [
-        .init(hexString: "006FFF"),
-        .init(hexString: "FF6F00")
-      ])
-    ) {
+  @Shared(.colors) var colors
+
+  $colors.withLock {
+    $0 = [
+      .init(hexString: "006FFF"),
+      .init(hexString: "FF6F00")
+    ]
+  }
+
+  return ColorListView(
+    store: .init(initialState: .init()) {
       ColorListFeature()
     }
   )

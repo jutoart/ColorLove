@@ -12,11 +12,11 @@ struct ColorView: View {
   @Bindable var store: StoreOf<ColorFeature>
 
   var body: some View {
-    Color(hexString: store.colorHexString)
+    Color(hexString: store.color.hexString)
       .aspectRatio(contentMode: .fit)
       .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
       .overlay(alignment: .bottomTrailing) {
-        Label("\(store.loveCount)", systemImage: "heart.fill")
+        Label("\(store.color.loveCount)", systemImage: "heart.fill")
           .foregroundStyle(.red)
           .padding(.horizontal, 8)
           .padding(.vertical, 4)
@@ -28,7 +28,7 @@ struct ColorView: View {
         store.send(.colorTapped)
       }
       .padding(80)
-      .navigationTitle(store.colorName.isEmpty ? "#\(store.colorHexString)" : store.colorName)
+      .navigationTitle(store.color.name.isEmpty ? "#\(store.color.hexString)" : store.color.name)
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
           Button("Edit", systemImage: "pencil") {
@@ -45,7 +45,7 @@ struct ColorView: View {
 #Preview {
   NavigationStack {
     ColorView(
-      store: .init(initialState: .init(colorHexString: "006FFF")) {
+      store: .init(initialState: .init(color: .init(hexString: "006FFF"))) {
         ColorFeature()
       }
     )

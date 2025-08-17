@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		26BA33462E51BDC900786296 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 26BA33452E51BDC900786296 /* ComposableArchitecture */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		26BA33362E51BD7800786296 /* ColorLove.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColorLove.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26BA33462E51BDC900786296 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = ColorLove;
 			packageProductDependencies = (
+				26BA33452E51BDC900786296 /* ComposableArchitecture */,
 			);
 			productName = ColorLove;
 			productReference = 26BA33362E51BD7800786296 /* ColorLove.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 26BA332D2E51BD7800786296;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				26BA33442E51BDC900786296 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 26BA33372E51BD7800786296 /* Products */;
 			projectDirPath = "";
@@ -351,6 +360,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		26BA33442E51BDC900786296 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = exactVersion;
+				version = 1.21.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		26BA33452E51BDC900786296 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26BA33442E51BDC900786296 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 26BA332E2E51BD7800786296 /* Project object */;
 }

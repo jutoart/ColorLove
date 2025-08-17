@@ -9,38 +9,42 @@ import ComposableArchitecture
 import SwiftUI
 
 struct ColorView: View {
-  let store: StoreOf<ColorFeature>
+  @Bindable var store: StoreOf<ColorFeature>
 
   var body: some View {
-    Color(hexString: store.colorHexString)
-      .aspectRatio(contentMode: .fit)
-      .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-      .overlay(alignment: .bottomTrailing) {
-        Label("\(store.loveCount)", systemImage: "heart.fill")
-          .foregroundStyle(.red)
-          .padding(.horizontal, 8)
-          .padding(.vertical, 4)
-          .background(.regularMaterial)
-          .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-          .padding()
-      }
-      .onTapGesture {
-        store.send(.colorTapped)
-      }
-      .overlay(alignment: .top) {
-        Text("#\(store.colorHexString)")
-          .offset(x: .zero, y: -32)
-      }
-      .overlay(alignment: .bottom) {
-        Button {
-          store.send(.generateButtonTapped)
-        } label: {
-          Label("Generate", systemImage: "sparkles")
+    NavigationStack {
+      Color(hexString: store.colorHexString)
+        .aspectRatio(contentMode: .fit)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(alignment: .bottomTrailing) {
+          Label("\(store.loveCount)", systemImage: "heart.fill")
+            .foregroundStyle(.red)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .padding()
         }
-        .buttonStyle(BorderedButtonStyle())
-        .offset(x: .zero, y: 56)
-      }
-      .padding(80)
+        .onTapGesture {
+          store.send(.colorTapped)
+        }
+        .padding(80)
+        .navigationTitle(store.colorName.isEmpty ? "#\(store.colorHexString)" : store.colorName)
+        .toolbar {
+          ToolbarItemGroup(placement: .primaryAction) {
+            Button("Generate", systemImage: "sparkles") {
+              store.send(.generateButtonTapped)
+            }
+
+            Button("Edit", systemImage: "pencil") {
+              store.send(.editButtonTapped)
+            }
+          }
+        }
+        .sheet(item: $store.scope(state: \.edit, action: \.edit)) {
+          ColorEditView(store: $0)
+        }
+    }
   }
 }
 

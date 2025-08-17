@@ -16,7 +16,7 @@ struct ColorLoveApp: App {
         store: .init(
           initialState: .init(colorHexString: "006FFF"),
           reducer: colorFeatureReducer,
-          environment: ()
+          environment: .live
         )
       )
     }

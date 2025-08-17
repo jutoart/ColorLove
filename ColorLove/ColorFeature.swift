@@ -22,8 +22,6 @@ struct ColorFeature {
     case colorTapped
     case edit(PresentationAction<ColorEditFeature.Action>)
     case editButtonTapped
-    case generateButtonTapped
-    case newColorGenerated(hexString: String)
   }
 
   var body: some ReducerOf<Self> {
@@ -46,23 +44,6 @@ struct ColorFeature {
 
       case .editButtonTapped:
         state.edit = .init(colorHexString: state.colorHexString, colorName: state.colorName)
-        return .none
-
-      case .generateButtonTapped:
-        return .run { send in
-          @Dependency(\.withRandomNumberGenerator) var withRandomNumberGenerator
-
-          let hexNumber = withRandomNumberGenerator { generator in
-            UInt64.random(in: 0...0xFFFFFF, using: &generator)
-          }
-
-          let hexString = String(hexNumber, radix: 16, uppercase: true)
-          await send(.newColorGenerated(hexString: hexString))
-        }
-
-      case let .newColorGenerated(hexString):
-        state.colorHexString = hexString
-        state.loveCount = 0
         return .none
       }
     }

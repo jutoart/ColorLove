@@ -10,13 +10,13 @@ import SwiftUI
 
 @main
 struct ColorLoveApp: App {
-  static let store = Store(initialState: .init(colorHexString: "006FFF")) {
-    ColorFeature()
+  static let store = Store(initialState: .init()) {
+    ColorListFeature()
   }
 
   var body: some Scene {
     WindowGroup {
-      ColorView(store: Self.store)
+      ColorListView(store: Self.store)
     }
   }
 }

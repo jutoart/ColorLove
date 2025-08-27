@@ -12,10 +12,10 @@ import SwiftUI
 struct ColorLoveApp: App {
   var body: some Scene {
     WindowGroup {
-      ColorView(
+      ColorListView(
         store: .init(
-          initialState: .init(colorHexString: "006FFF"),
-          reducer: colorFeatureReducer,
+          initialState: .init(),
+          reducer: colorListFeatureReducer,
           environment: .live
         )
       )

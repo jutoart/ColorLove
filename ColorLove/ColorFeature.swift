@@ -20,20 +20,6 @@ enum ColorFeatureAction {
   case dismissEdit
   case edit(ColorEditFeatureAction)
   case editButtonTapped
-  case generateButtonTapped
-  case newColorGenerated(hexString: String)
-}
-
-struct ColorFeatureEnvironment {
-  var generateNewColor: () -> EffectTask<String>
-
-  static let live = Self(
-    generateNewColor: {
-      let hexNumber = UInt64.random(in: 0...0xFFFFFF)
-      let hexString = String(hexNumber, radix: 16, uppercase: true)
-      return .init(value: hexString)
-    }
-  )
 }
 
 let colorFeatureReducer = colorEditFeatureReducer
@@ -43,8 +29,8 @@ let colorFeatureReducer = colorEditFeatureReducer
     with: AnyReducer<
       ColorFeatureState,
       ColorFeatureAction,
-      ColorFeatureEnvironment
-    > { state, action, environment in
+      Void
+    > { state, action, _ in
       switch action {
       case .colorTapped:
         state.loveCount += 1
@@ -71,16 +57,6 @@ let colorFeatureReducer = colorEditFeatureReducer
 
       case .editButtonTapped:
         state.edit = .init(colorHexString: state.colorHexString, colorName: state.colorName)
-        return .none
-
-      case .generateButtonTapped:
-        return environment.generateNewColor()
-          .map(ColorFeatureAction.newColorGenerated)
-
-      case let .newColorGenerated(hexString):
-        state.colorHexString = hexString
-        state.colorName = ""
-        state.loveCount = 0
         return .none
       }
     }

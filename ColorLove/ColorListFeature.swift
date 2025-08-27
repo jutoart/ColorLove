@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import Foundation
 
 struct ColorListFeatureState: Equatable {
   var colors: IdentifiedArrayOf<ColorModel> = []
@@ -27,7 +28,7 @@ struct ColorListFeatureEnvironment {
   static let live = Self(
     generateNewColor: {
       let hexNumber = UInt64.random(in: 0...0xFFFFFF)
-      let hexString = String(hexNumber, radix: 16, uppercase: true)
+      let hexString = String(format: "%06X", hexNumber)
       return .init(value: hexString)
     }
   )

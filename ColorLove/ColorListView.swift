@@ -14,7 +14,7 @@ struct ColorListView: View {
   var body: some View {
     NavigationStack {
       WithViewStore(store, observe: { $0 }) { viewStore in
-        List(viewStore.colors) { color in
+        List(viewStore.colors.sorted()) { color in
           Button {
             viewStore.send(.colorTapped(hexString: color.hexString))
           } label: {

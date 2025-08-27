@@ -43,11 +43,22 @@ let colorListFeatureReducer = colorFeatureReducer
       ColorListFeatureEnvironment
     > { state, action, environment in
       switch action {
+      case let .color(.delegate(delegateAction)):
+        switch delegateAction {
+        case let .updateColor(color):
+          state.colors[id: color.id] = color
+          return .none
+        }
+
       case .color:
         return .none
 
       case let .colorTapped(hexString):
-        state.color = .init(colorHexString: hexString)
+        guard let color = state.colors[id: hexString] else {
+          return .none
+        }
+
+        state.color = .init(color: color)
         return .none
 
       case .dismissColor:
@@ -59,8 +70,9 @@ let colorListFeatureReducer = colorFeatureReducer
           .map(ColorListFeatureAction.newColorGenerated)
 
       case let .newColorGenerated(hexString):
-        state.color = .init(colorHexString: hexString)
-        state.colors.insert(.init(hexString: hexString), at: .zero)
+        let color = ColorModel(hexString: hexString)
+        state.color = .init(color: color)
+        state.colors.insert(color, at: .zero)
         return .none
       }
     }

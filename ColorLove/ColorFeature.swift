@@ -8,18 +8,21 @@
 import ComposableArchitecture
 
 struct ColorFeatureState: Equatable {
-  var colorHexString: String
-  var colorName = ""
-  var loveCount = 0
+  var color: ColorModel
 
   var edit: ColorEditFeatureState?
 }
 
 enum ColorFeatureAction {
   case colorTapped
+  case delegate(Delegate)
   case dismissEdit
   case edit(ColorEditFeatureAction)
   case editButtonTapped
+
+  enum Delegate {
+    case updateColor(ColorModel)
+  }
 }
 
 let colorFeatureReducer = colorEditFeatureReducer
@@ -33,7 +36,10 @@ let colorFeatureReducer = colorEditFeatureReducer
     > { state, action, _ in
       switch action {
       case .colorTapped:
-        state.loveCount += 1
+        state.color.loveCount += 1
+        return .send(.delegate(.updateColor(state.color)))
+
+      case .delegate:
         return .none
 
       case .dismissEdit:
@@ -47,16 +53,16 @@ let colorFeatureReducer = colorEditFeatureReducer
           return .none
 
         case let .updateColor(name):
-          state.colorName = name
+          state.color.name = name
           state.edit = nil
-          return .none
+          return .send(.delegate(.updateColor(state.color)))
         }
 
       case .edit:
         return .none
 
       case .editButtonTapped:
-        state.edit = .init(colorHexString: state.colorHexString, colorName: state.colorName)
+        state.edit = .init(colorHexString: state.color.hexString, colorName: state.color.name)
         return .none
       }
     }

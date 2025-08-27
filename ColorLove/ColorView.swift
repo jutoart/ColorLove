@@ -13,11 +13,11 @@ struct ColorView: View {
 
   var body: some View {
     WithViewStore(store, observe: { $0 }) { viewStore in
-      Color(hexString: viewStore.colorHexString)
+      Color(hexString: viewStore.color.hexString)
         .aspectRatio(contentMode: .fit)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(alignment: .bottomTrailing) {
-          Label("\(viewStore.loveCount)", systemImage: "heart.fill")
+          Label("\(viewStore.color.loveCount)", systemImage: "heart.fill")
             .foregroundStyle(.red)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
@@ -29,7 +29,7 @@ struct ColorView: View {
           viewStore.send(.colorTapped)
         }
         .padding(80)
-        .navigationTitle(viewStore.colorName.isEmpty ? "#\(viewStore.colorHexString)" : viewStore.colorName)
+        .navigationTitle(viewStore.color.name.isEmpty ? "#\(viewStore.color.hexString)" : viewStore.color.name)
         .toolbar {
           ToolbarItem(placement: .primaryAction) {
             Button("Edit", systemImage: "pencil") {
@@ -61,7 +61,7 @@ struct ColorView: View {
   NavigationStack {
     ColorView(
       store: .init(
-        initialState: .init(colorHexString: "006FFF"),
+        initialState: .init(color: .init(hexString: "006FFF")),
         reducer: colorFeatureReducer,
         environment: ()
       )
